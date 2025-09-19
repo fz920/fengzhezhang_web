@@ -10,6 +10,18 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   trailingSlash: false,
+  output: 'standalone',
+  experimental: {
+    // Disable problematic build trace collection
+    outputFileTracingExcludes: {
+      '*': [
+        'node_modules/@swc/core-linux-x64-gnu',
+        'node_modules/@swc/core-linux-x64-musl',
+        'node_modules/@esbuild/linux-x64',
+        '**/node_modules/**',
+      ],
+    },
+  },
   images: {
     remotePatterns: [
       {
