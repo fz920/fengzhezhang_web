@@ -9,7 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 import GithubIcon from '../components/Icon/GithubIcon';
-import heroImage from '../images/ChatGPT_image_background.png';
+import heroImage from '../images/header-background.webp';
 import porfolioImage1 from '../images/portfolio/portfolio-1.jpg';
 import porfolioImage2 from '../images/portfolio/portfolio-2.jpg';
 import porfolioImage3 from '../images/portfolio/portfolio-3.jpg';
@@ -26,7 +26,6 @@ import testimonialImage from '../images/testimonial.webp';
 import {
   About,
   Award,
-  BlogPost,
   ContactSection,
   ContactType,
   Hero,
@@ -59,7 +58,6 @@ export const SectionId = {
   Skills: 'skills',
   Stats: 'stats',
   Testimonials: 'testimonials',
-  Blog: 'blog',
 } as const;
 
 export type SectionId = (typeof SectionId)[keyof typeof SectionId];
@@ -390,186 +388,6 @@ export const awards: Award[] = [
     title: 'The Winton Prize',
     description: 'Outstanding undergraduate 2nd-year group project prize in Mathematics',
     year: '2022',
-  },
-];
-
-/**
- * Blog posts section
- */
-export const blogPosts: BlogPost[] = [
-  {
-    id: 'diffusion-models-explained',
-    title: 'Understanding Diffusion Models: A Deep Dive into Modern Generative AI',
-    excerpt: 'An comprehensive introduction to diffusion models, their mathematical foundations, and practical applications in machine learning.',
-    content: `
-# Understanding Diffusion Models: A Deep Dive into Modern Generative AI
-
-Diffusion models have revolutionized the field of generative AI, powering everything from DALL-E 2 to Stable Diffusion. In this post, I'll walk you through the fundamental concepts and mathematical foundations that make these models so powerful.
-
-## What are Diffusion Models?
-
-Diffusion models are a class of generative models that learn to reverse a gradual noising process. The key insight is that by learning to denoise data step by step, we can generate new samples by starting from pure noise and gradually removing it.
-
-## The Forward Process
-
-The forward process systematically adds noise to data over $T$ timesteps:
-
-$$q(x_t | x_{t-1}) = \\mathcal{N}(x_t; \\sqrt{1-\\beta_t}x_{t-1}, \\beta_t I)$$
-
-This creates a Markov chain where each step adds a small amount of Gaussian noise. The noise schedule $\\beta_t$ is typically chosen to be small, and the marginal distribution after $T$ steps is approximately $\\mathcal{N}(0, I)$.
-
-We can also express the forward process in closed form:
-
-$$q(x_t | x_0) = \\mathcal{N}(x_t; \\sqrt{\\bar{\\alpha}_t}x_0, (1-\\bar{\\alpha}_t)I)$$
-
-where $\\alpha_t = 1 - \\beta_t$ and $\\bar{\\alpha}_t = \\prod_{s=1}^t \\alpha_s$.
-
-## The Reverse Process
-
-The reverse process learns to denoise:
-
-$$p_\\theta(x_{t-1} | x_t) = \\mathcal{N}(x_{t-1}; \\mu_\\theta(x_t, t), \\Sigma_\\theta(x_t, t))$$
-
-By training a neural network to predict the noise $\\epsilon_\\theta(x_t, t)$, we can learn this reverse process. The training objective is:
-
-$$L = \\mathbb{E}_{t, x_0, \\epsilon} \\left[ \\|\\epsilon - \\epsilon_\\theta(\\sqrt{\\bar{\\alpha}_t}x_0 + \\sqrt{1-\\bar{\\alpha}_t}\\epsilon, t)\\|^2 \\right]$$
-
-## Applications in My Research
-
-In my work on molecular generation, I've applied diffusion models to sample from complex energy functions, achieving significant speedups over traditional MCMC methods. The key insight is that we can condition the denoising process on molecular properties using classifier-free guidance.
-
-Stay tuned for more posts on advanced sampling techniques and their applications in computational chemistry!
-    `,
-    date: '2024-11-15',
-    readTime: '8 min read',
-    tags: ['Diffusion Models', 'Deep Learning', 'Generative AI'],
-    image: porfolioImage1,
-  },
-  {
-    id: 'consistency-models-molecular-sampling',
-    title: 'Consistency Models for Faster Molecular Energy Sampling',
-    excerpt: 'How consistency models can accelerate sampling from molecular energy functions, based on my MPhil dissertation research.',
-    content: `
-# Consistency Models for Faster Molecular Energy Sampling
-
-In my MPhil dissertation, I developed a novel approach combining consistency models with importance sampling to accelerate molecular energy function sampling. This post explains the key innovations and results.
-
-## The Challenge
-
-Traditional sampling methods like MCMC can be prohibitively slow for complex molecular systems. Diffusion models offer an alternative, but even they require many denoising steps.
-
-## Consistency Models: The Solution
-
-Consistency models learn to map any point on a noising trajectory directly to the clean data point. This eliminates the need for iterative denoising.
-
-## Key Contributions
-
-1. **Unbiased Sampling**: By combining with importance sampling, we maintain theoretical guarantees
-2. **4x Speedup**: Significant computational savings compared to DDPM baselines
-3. **Molecular Applications**: Validated on realistic energy functions
-
-## Results
-
-Our framework achieved:
-- Faster convergence to target distributions
-- Maintained sample quality
-- Reduced computational overhead
-
-This work demonstrates the potential of modern generative models in computational chemistry and opens new avenues for scientific computing.
-
-## Mathematical Framework
-
-Our approach builds on the consistency model framework. Given a PDE $\\frac{dx}{dt} = f(x, t)$ with the boundary condition $x(T) = z \\sim \\mathcal{N}(0, I)$, we train a function $f_\\theta$ to satisfy the **consistency property**:
-
-$$f_\\theta(x(t), t) = f_\\theta(x(s), s) \\quad \\forall t, s \\in [\\epsilon, T]$$
-
-The training loss combines consistency loss and importance sampling correction:
-
-$$\\mathcal{L} = \\mathbb{E}\\left[\\lambda(t) d(f_\\theta(x_t, t), f_\\theta(x_{t+\\Delta t}, t+\\Delta t))\\right] + \\mathcal{L}_{\\text{IS}}$$
-
-where $\\lambda(t)$ is a weighting function and $\\mathcal{L}_{\\text{IS}}$ ensures unbiased sampling from the target molecular energy distribution $p(x) \\propto e^{-U(x)/kT}$.
-    `,
-    date: '2024-10-28',
-    readTime: '6 min read',
-    tags: ['Consistency Models', 'Molecular Dynamics', 'Computational Chemistry'],
-    image: porfolioImage2,
-  },
-  {
-    id: 'future-of-probabilistic-models',
-    title: 'The Future of Probabilistic Generative Models in Science',
-    excerpt: 'Exploring emerging trends and potential applications of probabilistic models in scientific research and discovery.',
-    content: `
-# The Future of Probabilistic Generative Models in Science
-
-As we advance into an era of AI-driven scientific discovery, probabilistic generative models are becoming increasingly important tools for researchers across disciplines.
-
-## Current State
-
-Today's models excel at:
-- Image and text generation
-- Protein structure prediction
-- Drug discovery
-- Material design
-
-## Emerging Trends
-
-### 1. Foundation Models for Science
-Large-scale models trained on scientific data are beginning to emerge, offering unprecedented capabilities for scientific reasoning.
-
-### 2. Multi-Modal Integration
-Combining different data modalities (text, images, molecular structures) in unified frameworks.
-
-### 3. Uncertainty Quantification
-Better methods for estimating and communicating model uncertainty in scientific applications.
-
-## Challenges Ahead
-
-- **Interpretability**: Understanding how models make predictions
-- **Generalization**: Ensuring models work on out-of-distribution scientific problems
-- **Computational Efficiency**: Making models accessible to all researchers
-
-## My Vision
-
-I believe the future lies in developing specialized models that understand the underlying physics and chemistry of the systems they model, rather than purely data-driven approaches.
-
-What are your thoughts on the role of AI in scientific discovery? Let's discuss in the comments!
-    `,
-    date: '2024-09-12',
-    readTime: '5 min read',
-    tags: ['Machine Learning', 'Scientific Computing', 'Future Trends'],
-    image: porfolioImage3,
-  },
-  {
-    id: 'latex-test',
-    title: 'Testing LaTeX in Blog Posts',
-    excerpt: 'A simple test to verify that mathematical formulas render correctly in blog posts.',
-    content: `
-# Testing LaTeX Support
-
-This is a simple test post to verify that our LaTeX rendering works correctly.
-
-## Basic Math
-
-Here are some inline math examples: $x = 5$ and $\\alpha = \\beta + \\gamma$.
-
-And here is a block equation:
-
-$$f(x) = ax^2 + bx + c$$
-
-Another equation:
-
-$$\\int_0^1 x^2 dx = \\frac{1}{3}$$
-
-## Text and Math Together
-
-The famous equation $E = mc^2$ revolutionized physics. We can also write more complex expressions like $\\sum_{i=1}^n x_i = \\mu$.
-
-That's it for now!
-    `,
-    date: '2024-09-10',
-    readTime: '2 min read',
-    tags: ['LaTeX', 'Testing', 'Math'],
-    image: porfolioImage4,
   },
 ];
 
